@@ -2,6 +2,7 @@ import React from 'react';
 import { Avatar, AvatarGroup, Box, Divider, Flex, Button, Text, Link } from '@chakra-ui/react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ChatIcon } from '@chakra-ui/icons';
+import GoogleMapsIcon from '../assets/google-maps-svgrepo-com.svg'; // Import the SVG icon
 
 const CommentAvatar = ({ comments = [], rideId }) => {
     // Create an array of unique authors
@@ -22,15 +23,20 @@ const CommentAvatar = ({ comments = [], rideId }) => {
                 )}
 
                 {rideId && (
-                    <Link as={RouterLink} to={`/rides/${rideId}`}>
-                        <Button variant='solid' colorScheme='blue' borderRadius='full'>
-                            Go to Post{' '}
-                            <ChatIcon ml={2} style={{ marginLeft: '0.5rem' }} />
-                            <Text as="span" ml="1" fontSize="sm">
-                                {comments.length}
-                            </Text>
-                        </Button>
-                    </Link>
+                    <Flex alignItems="center">
+                        <Link href={`https://www.google.com/maps`} target="_blank">
+                            <img src={GoogleMapsIcon} alt="Google Maps" style={{ height: '36px', marginRight: '0.7rem' }} />
+                        </Link>
+                        <Link as={RouterLink} to={`/rides/${rideId}`}>
+                            <Button variant='solid' colorScheme='blue' borderRadius='full'>
+                                Go to Post{' '}
+                                <ChatIcon ml={2} style={{ marginLeft: '0.5rem' }} />
+                                <Text as="span" ml="1" fontSize="sm">
+                                    {comments.length}
+                                </Text>
+                            </Button>
+                        </Link>
+                    </Flex>
                 )}
             </Flex>
         </Box>
