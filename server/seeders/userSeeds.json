@@ -1,0 +1,52 @@
+[
+  {
+    "username": "Brian Kenighan",
+    "email": "brian@email.com",
+    "password": "brian"
+  },
+  {
+    "username": "Max Kanat-Alexander",
+    "email": "maxkanat@email.com",
+    "password": "maxkanat"
+  },
+  {
+    "username": "Karen Manager",
+    "email": "karen@email.com",
+    "password": "karen"
+  },
+  {
+    "username": "Kent Beck",
+    "email": "kentback@email.com",
+    "password": "kentback@email.com"
+  },
+  {
+    "username": "Edward V. Berard",
+    "email": "edward@email.com",
+    "password": "edward"
+  },
+  {
+    "username": "Alan Kay",
+    "email": "alankay@email.com",
+    "password": "alankay"
+  },
+  {
+    "username": "C.A.R. Hoare",
+    "email": "carhoe@email.com",
+    "password": "carhoe"
+  },
+  {
+    "username": "David Thomas",
+    "email": "david@email.com",
+    "password": "david"
+  },
+  {
+    "username": "Donald Knuth",
+    "email": "donald@email.com",
+    "password": "donald"
+  },
+  {
+    "username": "Lernantino",
+    "email": "lernantino@email.com",
+    "password": "lernantino"
+  }
+]

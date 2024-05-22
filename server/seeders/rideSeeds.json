@@ -1,0 +1,82 @@
+[
+  {
+    "origin": "Sydney",
+    "destination": "Melbourne",
+    "date": "Jun, 01 2024",
+    "time": "08:00",
+    "rideAuthor": "Brian Kernighan",
+    "isDriver": true
+  },
+  {
+    "origin": "Brisbane",
+    "destination": "Sydney",
+    "date": "Jun, 02 2024",
+    "time": "09:00",
+    "rideAuthor": "Max Kanat-Alexander",
+    "isDriver": false
+  },
+  {
+    "origin": "Perth",
+    "destination": "Adelaide",
+    "date": "Jun, 03 2024",
+    "time": "10:00",
+    "rideAuthor": "Why The Lucky Stiff",
+    "isDriver": true
+  },
+  {
+    "origin": "Hobart",
+    "destination": "Launceston",
+    "date": "Jun, 04 2024",
+    "time": "11:00",
+    "rideAuthor": "Kent Beck",
+    "isDriver": false
+  },
+  {
+    "origin": "Canberra",
+    "destination": "Sydney",
+    "date": "Jun, 05 2024",
+    "time": "12:00",
+    "rideAuthor": "Edward V. Berard",
+    "isDriver": true
+  },
+  {
+    "origin": "Darwin",
+    "destination": "Alice Springs",
+    "date": "Jun, 06 2024",
+    "time": "13:00",
+    "rideAuthor": "Alan Kay",
+    "isDriver": false
+  },
+  {
+    "origin": "Cairns",
+    "destination": "Townsville",
+    "date": "Jun, 07 2024",
+    "time": "14:00",
+    "rideAuthor": "C.A.R. Hoare",
+    "isDriver": true
+  },
+  {
+    "origin": "Gold Coast",
+    "destination": "Brisbane",
+    "date": "Jun, 08 2024",
+    "time": "15:00",
+    "rideAuthor": "David Thomas",
+    "isDriver": false
+  },
+  {
+    "origin": "Newcastle",
+    "destination": "Sydney",
+    "date": "Jun, 09 2024",
+    "time": "16:00",
+    "rideAuthor": "Donald Knuth",
+    "isDriver": true
+  },
+  {
+    "origin": "Geelong",
+    "destination": "Melbourne",
+    "date": "Jun, 10 2024",
+    "time": "17:00",
+    "rideAuthor": "Lernantino",
+    "isDriver": false
+  }
+]
