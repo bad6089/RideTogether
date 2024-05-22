@@ -1,4 +1,3 @@
-// src/App.jsx
 import {
   ApolloClient,
   InMemoryCache,
@@ -6,7 +5,7 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
 import Header from './components/Header';
@@ -34,13 +33,16 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const location = useLocation();
+  const hideNavigation = ['/rides/', '/profiles/', '/me'].some(path => location.pathname.startsWith(path));
+
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
-        <div className='flex-column justify-flex-start min-100-vh'>
+        <div className="flex-column justify-flex-start min-100-vh">
           <Header />
           <Layout>
-            <Navigation />
+            {!hideNavigation && <Navigation />}
             <Outlet />
           </Layout>
           <Footer />

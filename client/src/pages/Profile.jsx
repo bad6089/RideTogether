@@ -50,11 +50,11 @@ const Profile = () => {
 
   return (
     <Layout>
-      <Box textAlign="center" mb={5}>
-        <Heading as="h2" size="lg" bg="" color="black" p={3} borderRadius="full" style={{ outline: "1px solid gray" }}>
-          Viewing {userParam ? `${user.username}'s` : 'your'} profile.
-        </Heading>
-      </Box>
+      <Box textAlign="center" mb={5} border="1px solid #CBD5E0" borderRadius="full">
+      <Heading as="h2" size="lg" bg="" color="black" p={3}>
+        Viewing {userParam ? `${user.username}'s` : 'your'} profile.
+      </Heading>
+    </Box>
 
       <Flex justify="" mt={6} mb={4}>
         <Button

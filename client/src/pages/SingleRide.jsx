@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import {
@@ -15,10 +15,10 @@ import {
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
-  PopoverCloseButton,
   PopoverHeader,
   PopoverBody,
   useToast,
+  useOutsideClick,
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -36,6 +36,7 @@ import CommentList from '../components/CommentList';
 import CommentForm from '../components/CommentForm';
 import Layout from '../components/Layout';
 import Auth from '../utils/auth';
+import GoogleMapsIcon from '../assets/google-maps-svgrepo-com.svg'; // Import the SVG icon
 
 const SingleRide = () => {
   const { id: rideId } = useParams();
@@ -55,8 +56,15 @@ const SingleRide = () => {
   });
 
   const [rideDeleted, setRideDeleted] = useState(false);
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const popoverRef = useRef();
 
   const ride = data?.ride || {};
+
+  useOutsideClick({
+    ref: popoverRef,
+    handler: () => setIsPopoverOpen(false),
+  });
 
   if (loading) {
     return <Spinner />;
@@ -165,18 +173,22 @@ const SingleRide = () => {
               </Text>
               <FontAwesomeIcon icon={ride.isDriver ? faCar : faPersonWalkingLuggage} color='#808080' />
               {ride.rideAuthor === currentUser && (
-                <Popover placement='bottom-end'>
+                <Popover
+                  isOpen={isPopoverOpen}
+                  onClose={() => setIsPopoverOpen(false)}
+                  initialFocusRef={popoverRef}
+                >
                   <PopoverTrigger>
                     <IconButton
                       icon={<FontAwesomeIcon icon={faEllipsis} />}
                       variant='ghost'
                       size='md'
                       left='8px'
+                      onClick={() => setIsPopoverOpen(!isPopoverOpen)}
                     />
                   </PopoverTrigger>
-                  <PopoverContent width="fit-content">
+                  <PopoverContent ref={popoverRef} width="fit-content">
                     <PopoverArrow />
-                    {/* <PopoverCloseButton /> */}
                     <PopoverHeader fontSize='sm'>Manage Ride</PopoverHeader>
                     <PopoverBody>
                       <Button colorScheme='red' size='sm' rounded='full' onClick={() => handleRemoveRide(ride._id)}>
@@ -226,6 +238,12 @@ const SingleRide = () => {
               <Box pl={-1}>
                 <Text color='gray.500' fontSize='sm'>Date</Text>
                 <Text fontWeight='bold' fontSize='md'>{ride.date}</Text>
+              </Box>
+              {/* Google Maps icon */}
+              <Box ml="auto" display="flex" alignItems="center">
+              <a href={`https://www.google.com/maps`} target="_blank" rel="noopener noreferrer">
+                  <img src={GoogleMapsIcon} alt="Google Maps" style={{ height: '36px', marginRight: '0.3rem' }} />
+              </a>
               </Box>
             </Flex>
             

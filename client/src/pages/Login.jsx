@@ -9,19 +9,24 @@ import {
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
   Input,
-  useDisclosure,
   Alert,
   AlertIcon,
   Box,
   Link,
+  CloseButton,
+  Flex,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Auth from '../utils/auth';
 
 const Login = ({ isOpen, onOpen, onClose }) => {
   const [formState, setFormState] = useState({ email: '', password: '' });
   const [login, { error, data }] = useMutation(LOGIN_USER);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -47,15 +52,18 @@ const Login = ({ isOpen, onOpen, onClose }) => {
     });
   };
 
+  const handlePasswordToggle = () => setShowPassword(!showPassword);
+
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Login</ModalHeader>
+          <ModalHeader color='#150035'>Welcome Back</ModalHeader>
+          <CloseButton position="absolute" right="8px" top="8px" onClick={onClose} />
           <ModalBody>
             {data ? (
-              <Box>
+              <Box mb='15'>
                 Success! You may now head{' '}
                 <Link as={RouterLink} to='/'>
                   back to the homepage.
@@ -72,18 +80,41 @@ const Login = ({ isOpen, onOpen, onClose }) => {
                   onChange={handleChange}
                   mb={4}
                 />
-                <Input
-                  rounded='full'
-                  placeholder='******'
-                  name='password'
-                  type='password'
-                  value={formState.password}
-                  onChange={handleChange}
-                  mb={4}
-                />
-                <Button colorScheme='teal' type='submit' rounded='full'>
-                  Submit
-                </Button>
+                <InputGroup size='md' mb={4}>
+                  <Input
+                    pr='4.5rem'
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder='Enter password'
+                    name='password'
+                    value={formState.password}
+                    onChange={handleChange}
+                    rounded='full'
+                  />
+                  <InputRightElement width='4.5rem'>
+                    <Button
+                      h='1.75rem'
+                      size='sm'
+                      onClick={handlePasswordToggle}
+                      variant='ghost'
+                      _focus={{ boxShadow: 'none' }} // Remove the focus outline
+                      _hover={{ backgroundColor: 'transparent' }} // Optional: remove background on hover
+                      _active={{ backgroundColor: 'transparent' }} // Optional: remove background on active
+                    >
+                      {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
+                <Flex justify="center" mb='15px'>
+                  <Button
+                    colorScheme='blue'
+                    type='submit'
+                    rounded='full'
+                    width="100%"
+                    variant='solid'
+                  >
+                    Login
+                  </Button>
+                </Flex>
               </form>
             )}
             {error && (
@@ -93,11 +124,6 @@ const Login = ({ isOpen, onOpen, onClose }) => {
               </Alert>
             )}
           </ModalBody>
-          <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose} rounded='full'>
-              Close
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>
