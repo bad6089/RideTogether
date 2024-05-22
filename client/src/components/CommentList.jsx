@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useMutation } from '@apollo/client';
 import {
   Box,
@@ -15,7 +15,8 @@ import {
   PopoverBody,
   Input,
   useToast,
-  ButtonGroup
+  ButtonGroup,
+  useOutsideClick
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
@@ -27,10 +28,18 @@ const CommentList = ({ comments = [], rideId }) => {
   const [editMode, setEditMode] = useState(null);
   const [editText, setEditText] = useState('');
   const toast = useToast();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(null);
+  const popoverRef = useRef();
+
+  useOutsideClick({
+    ref: popoverRef,
+    handler: () => setIsPopoverOpen(null),
+  });
 
   const [removeComment] = useMutation(REMOVE_COMMENT, {
     refetchQueries: [{ query: QUERY_RIDES }],
   });
+
   const [editComment] = useMutation(EDIT_COMMENT, {
     refetchQueries: [{ query: QUERY_RIDES }],
   });
@@ -119,7 +128,12 @@ const CommentList = ({ comments = [], rideId }) => {
           position="relative"
         >
           {Auth.loggedIn() && currentUser === comment.commentAuthor && (
-            <Popover placement="bottom-end">
+            <Popover
+              isOpen={isPopoverOpen === comment._id}
+              onClose={() => setIsPopoverOpen(null)}
+              initialFocusRef={popoverRef}
+              placement="bottom-end"
+            >
               <PopoverTrigger>
                 <IconButton
                   icon={<FontAwesomeIcon icon={faEllipsis} />}
@@ -128,9 +142,10 @@ const CommentList = ({ comments = [], rideId }) => {
                   position="absolute"
                   top="8px"
                   right="8px"
+                  onClick={() => setIsPopoverOpen(comment._id)}
                 />
               </PopoverTrigger>
-              <PopoverContent width="fit-content">
+              <PopoverContent ref={popoverRef} width="fit-content">
                 <PopoverArrow />
                 <PopoverHeader fontSize="sm">Manage Comment</PopoverHeader>
                 <PopoverBody>

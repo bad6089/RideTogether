@@ -1,3 +1,4 @@
+import React, { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import {
@@ -9,18 +10,14 @@ import {
   useToast,
   Divider,
   Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   IconButton,
   Popover,
   PopoverTrigger,
   PopoverContent,
   PopoverArrow,
-  PopoverCloseButton,
   PopoverHeader,
   PopoverBody,
+  useOutsideClick,
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -35,9 +32,8 @@ import { faClock } from '@fortawesome/free-regular-svg-icons';
 import { REMOVE_COMMENT, REMOVE_RIDE } from '../utils/mutations';
 import { QUERY_RIDES } from '../utils/queries';
 import Auth from '../utils/auth';
-import CommentForm from '../components/CommentForm';
-import CommentList from '../components/CommentList';
 import CommentAvatar from '../components/CommentAvatar'; 
+import GoogleMapsIcon from '../assets/google-maps-svgrepo-com.svg'; // Import the SVG icon
 
 const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
   const [removeRide] = useMutation(REMOVE_RIDE, {
@@ -49,6 +45,13 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
   });
 
   const toast = useToast();
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const popoverRef = useRef();
+
+  useOutsideClick({
+    ref: popoverRef,
+    handler: () => setIsPopoverOpen(false),
+  });
 
   const handleRemoveRide = async (rideId) => {
     try {
@@ -156,19 +159,22 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
                 color={ride.isDriver ? '#808080' : '#808080'}
               />
               {ride.rideAuthor === currentUser && (
-                <Popover placement='bottom-end' >
+                <Popover 
+                  isOpen={isPopoverOpen}
+                  onClose={() => setIsPopoverOpen(false)}
+                >
                   <PopoverTrigger>
                     <IconButton
                       icon={<FontAwesomeIcon icon={faEllipsis} />}
                       variant='ghost'
                       size='md'
                       left='8px'
+                      onClick={() => setIsPopoverOpen(!isPopoverOpen)}
                     />
                   </PopoverTrigger>
-                  <PopoverContent width="fit-content">
+                  <PopoverContent ref={popoverRef} width="fit-content">
                     <PopoverArrow />
-                    {/* <PopoverCloseButton /> */}
-                    <PopoverHeader>Manage Ride</PopoverHeader>
+                    <PopoverHeader fontSize='sm'>Manage Ride</PopoverHeader>
                     <PopoverBody>
                       <Button
                         colorScheme='red'
@@ -267,19 +273,14 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
                   {ride.date}
                 </Text>
               </Box>
+              {/* Google Maps icon */}
+              <Box ml="auto" display="flex" alignItems="center">
+              <a href={`https://www.google.com/maps`} target="_blank" rel="noopener noreferrer">
+                  <img src={GoogleMapsIcon} alt="Google Maps" style={{ height: '36px', marginRight: '0.3rem' }} />
+              </a>
+              </Box>
             </Flex>
-            
-            {/* <CommentForm rideId={ride._id} />
-            <CommentList comments={ride.comments} rideId={ride._id} /> */}
             <CommentAvatar comments={ride.comments} rideId={ride._id} />
-{/* 
-            <Flex mt={4} justifyContent='flex-end'>
-              <Link to={`/rides/${ride._id}`}>
-                <Button variant='solid' colorScheme='blue' borderRadius='full'>
-                  go to post
-                </Button>
-              </Link>
-            </Flex> */}
           </Box>
         </Box>
       ))}

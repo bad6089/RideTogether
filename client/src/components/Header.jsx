@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import {
   Flex,
   Button,
@@ -7,22 +7,20 @@ import {
   Box,
   Text,
   useDisclosure,
+  Avatar,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverArrow,
+  PopoverBody,
+  useOutsideClick,
 } from '@chakra-ui/react';
 import carpoolLogo from '../assets/banner.svg';
 import Auth from '../utils/auth';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import { Link } from 'react-router-dom';
-import { Avatar, AvatarBadge, AvatarGroup } from '@chakra-ui/react';
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverBody,
-} from '@chakra-ui/react';
 
 const Header = () => {
   const {
@@ -35,6 +33,14 @@ const Header = () => {
     onOpen: onSignupOpen,
     onClose: onSignupClose,
   } = useDisclosure();
+
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  const popoverRef = useRef();
+
+  useOutsideClick({
+    ref: popoverRef,
+    handler: () => setIsPopoverOpen(false),
+  });
 
   const logout = (event) => {
     event.preventDefault();
@@ -85,14 +91,21 @@ const Header = () => {
             {Auth.loggedIn() ? (
               <>
                 <Flex align='center'>
-                  <Popover placement='bottom-start'>
+                  <Popover
+                    isOpen={isPopoverOpen}
+                    onClose={() => setIsPopoverOpen(false)}
+                    initialFocusRef={popoverRef}
+                    placement='bottom-start'
+                  >
                     <PopoverTrigger>
                       <Avatar
                         name={Auth.getProfile().data.username}
                         cursor='pointer'
+                        onClick={() => setIsPopoverOpen(!isPopoverOpen)}
                       />
                     </PopoverTrigger>
-                    <PopoverContent width="fit-content">
+                    <PopoverContent ref={popoverRef} width="fit-content">
+                      <PopoverArrow />
                       <PopoverHeader fontWeight='semibold'>
                         <Flex align='center'>
                           <Avatar
@@ -112,8 +125,6 @@ const Header = () => {
                           </Link>
                         </Flex>
                       </PopoverHeader>
-                      <PopoverArrow />
-                      {/* <PopoverCloseButton /> */}
                       <PopoverBody>
                         <Button borderRadius='full' onClick={logout}>
                           Logout
@@ -126,7 +137,6 @@ const Header = () => {
                     Hi, {Auth.getProfile().data.username}
                   </Text>
                 </Flex>
-                <Link to='/me' style={{ textDecoration: 'none' }}></Link>
               </>
             ) : (
               <>
