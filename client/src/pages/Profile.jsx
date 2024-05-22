@@ -51,7 +51,7 @@ const Profile = () => {
   return (
     <Layout>
       <Box textAlign="center" mb={5}>
-        <Heading as="h2" size="lg" bg="blue.500" color="white" p={3} borderRadius="md">
+        <Heading as="h2" size="lg" bg="" color="black" p={3} borderRadius="full" style={{ outline: "1px solid gray" }}>
           Viewing {userParam ? `${user.username}'s` : 'your'} profile.
         </Heading>
       </Box>

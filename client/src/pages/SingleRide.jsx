@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import {
@@ -9,10 +10,6 @@ import {
   Spinner,
   Divider,
   Avatar,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
   IconButton,
   Popover,
   PopoverTrigger,
@@ -40,7 +37,6 @@ import CommentForm from '../components/CommentForm';
 import Layout from '../components/Layout';
 import Auth from '../utils/auth';
 
-
 const SingleRide = () => {
   const { id: rideId } = useParams();
   const toast = useToast();
@@ -58,6 +54,8 @@ const SingleRide = () => {
     refetchQueries: [{ query: QUERY_RIDES }],
   });
 
+  const [rideDeleted, setRideDeleted] = useState(false);
+
   const ride = data?.ride || {};
 
   if (loading) {
@@ -67,6 +65,7 @@ const SingleRide = () => {
   const handleRemoveRide = async (rideId) => {
     try {
       await removeRide({ variables: { rideId } });
+      setRideDeleted(true);
       toast({
         title: 'Ride removed.',
         description: 'The ride has been removed successfully.',
@@ -108,7 +107,28 @@ const SingleRide = () => {
     }
   };
 
-  
+  if (rideDeleted) {
+    return (
+      <Layout>
+        <Box my={3}>
+          <Box
+            borderColor='gray.300'
+            borderWidth='1px'
+            borderRadius='lg'
+            overflow='hidden'
+            mb={4}
+            p={4}
+          >
+            <Heading size='md' color='red.500'>
+              Ride Deleted
+            </Heading>
+            <Text>This ride has been deleted.</Text>
+          </Box>
+        </Box>
+      </Layout>
+    );
+  }
+
   return (
     <Layout>
       <Box my={3}>
@@ -211,20 +231,10 @@ const SingleRide = () => {
             
             <CommentForm rideId={ride._id} />
             <CommentList comments={ride.comments} rideId={ride._id} />
-
-
-            {/* <Flex mt={4} justifyContent='flex-end'>
-              <Link to={`/rides/${ride._id}`}>
-                <Button size='sm' colorScheme='teal' variant='outline'>View Full Ride</Button>
-              </Link>
-            </Flex> */}
           </Box>
         </Box>
-        {/* <CommentForm rideId={ride._id} /> */}
       </Box>
-      {/* <CommentList /> */}
     </Layout>
-    
   );
 };
 
