@@ -123,7 +123,7 @@ const RideForm = () => {
       rounded='md'
       width='100%'
       borderWidth='1px'
-      borderRadius='lg'
+      borderRadius='3xl'
       borderColor='gray.300'
       mx='auto'
     >

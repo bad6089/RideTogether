@@ -119,7 +119,7 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
           key={ride._id}
           borderColor='gray.300'
           borderWidth='1px'
-          borderRadius='lg'
+          borderRadius='3xl'
           overflow='hidden'
           mb={4}
         >
