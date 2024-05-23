@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
 import Auth from '../utils/auth';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Button,
   Modal,
@@ -14,7 +14,6 @@ import {
   Alert,
   AlertIcon,
   Box,
-  Link,
   CloseButton,
   Flex,
   InputGroup,
@@ -65,12 +64,17 @@ const Signup = ({ isOpen, onOpen, onClose }) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color='#150035'>Create Account</ModalHeader>
-          <CloseButton position="absolute" right="8px" top="8px" onClick={onClose} />
+          <CloseButton
+            position='absolute'
+            right='8px'
+            top='8px'
+            onClick={onClose}
+          />
           <ModalBody>
             {data ? (
               <Box mb='15'>
                 Success! You may now head{' '}
-                <Link as={RouterLink} to='/'>
+                <Link to='/'>
                   back to the homepage.
                 </Link>
               </Box>
@@ -110,20 +114,24 @@ const Signup = ({ isOpen, onOpen, onClose }) => {
                       size='sm'
                       onClick={handlePasswordToggle}
                       variant='ghost'
-                      _focus={{ boxShadow: 'none' }} // Remove the focus outline
-                      _hover={{ backgroundColor: 'transparent' }} // Optional: remove background on hover
-                      _active={{ backgroundColor: 'transparent' }} // Optional: remove background on active
+                      _focus={{ boxShadow: 'none' }} 
+                      _hover={{ backgroundColor: 'transparent' }} 
+                      _active={{ backgroundColor: 'transparent' }}
                     >
-                      {showPassword ? <FontAwesomeIcon icon={faEyeSlash} /> : <FontAwesomeIcon icon={faEye} />}
+                      {showPassword ? (
+                        <FontAwesomeIcon icon={faEyeSlash} />
+                      ) : (
+                        <FontAwesomeIcon icon={faEye} />
+                      )}
                     </Button>
                   </InputRightElement>
                 </InputGroup>
-                <Flex justify="center" mb='15px'>
+                <Flex justify='center' mb='15px'>
                   <Button
                     colorScheme='blue'
                     type='submit'
                     rounded='full'
-                    width="100%"
+                    width='100%'
                     variant='solid'
                   >
                     Sign Up

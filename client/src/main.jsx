@@ -1,4 +1,3 @@
-// src/main.js
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import App from './App.jsx';
@@ -9,7 +8,7 @@ import Login from './pages/Login';
 import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 import SingleRide from './pages/SingleRide.jsx';
-import SupportMe from './pages/SupportMe';
+import Support from './pages/Support.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
 
@@ -28,8 +27,8 @@ const router = createBrowserRouter([
         element: <About />,
       },
       {
-        path: '/support-me',
-        element: <SupportMe />,
+        path: '/support',
+        element: <Support />,
       },
       {
         path: '/login',

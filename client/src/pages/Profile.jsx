@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { Box, Heading, Spinner, Button, Flex } from '@chakra-ui/react';
 
-import RideForm from '../components/RideForm';
 import RideList from '../components/RideList';
 import Layout from '../components/Layout';
 
@@ -24,7 +23,10 @@ const Profile = () => {
   const [removeRide] = useMutation(REMOVE_RIDE, {
     refetchQueries: [
       { query: QUERY_RIDES },
-      { query: userParam ? QUERY_USER : QUERY_ME, variables: { username: userParam } }
+      {
+        query: userParam ? QUERY_USER : QUERY_ME,
+        variables: { username: userParam },
+      },
     ],
   });
 
@@ -43,20 +45,27 @@ const Profile = () => {
     }
   };
 
-  const userRides = rideData?.rides?.filter((ride) => ride.rideAuthor === user.username) || [];
-  const commentedRides = rideData?.rides?.filter((ride) =>
-    ride.comments.some((comment) => comment.commentAuthor === currentUser)
-  ) || [];
+  const userRides =
+    rideData?.rides?.filter((ride) => ride.rideAuthor === user.username) || [];
+  const commentedRides =
+    rideData?.rides?.filter((ride) =>
+      ride.comments.some((comment) => comment.commentAuthor === currentUser)
+    ) || [];
 
   return (
     <Layout>
-      <Box textAlign="center" mb={5} border="1px solid #CBD5E0" borderRadius="full">
-      <Heading as="h2" size="lg" bg="" color="black" p={3}>
-        Viewing {userParam ? `${user.username}'s` : 'your'} profile.
-      </Heading>
-    </Box>
+      <Box
+        textAlign='center'
+        mb={5}
+        border='1px solid #CBD5E0'
+        borderRadius='full'
+      >
+        <Heading as='h2' size='lg' bg='' color='black' p={3}>
+          Viewing {userParam ? `${user.username}'s` : 'your'} profile.
+        </Heading>
+      </Box>
 
-      <Flex justify="" mt={6} mb={4}>
+      <Flex justify='' mt={6} mb={4}>
         <Button
           borderRadius='full'
           onClick={() => setCurrentFilter('yourRides')}
@@ -70,7 +79,7 @@ const Profile = () => {
           colorScheme={currentFilter === 'commentedRides' ? 'blue' : 'gray'}
           ml={2}
         >
-          Rides You've Commented On
+          Your comments
         </Button>
       </Flex>
 
@@ -78,7 +87,7 @@ const Profile = () => {
         {currentFilter === 'yourRides' && (
           <RideList
             rides={userRides}
-            title="Your rides..."
+            title='Your rides...'
             showTitle={true}
             showUsername={true}
             handleRemoveRide={handleRemoveRide}
@@ -93,12 +102,6 @@ const Profile = () => {
           />
         )}
       </Box>
-
-      {!userParam && (
-        <Box mb={3}>
-          <RideForm />
-        </Box>
-      )}
     </Layout>
   );
 };

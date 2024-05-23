@@ -16,7 +16,7 @@ import {
   Input,
   useToast,
   ButtonGroup,
-  useOutsideClick
+  useOutsideClick,
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
@@ -47,13 +47,13 @@ const CommentList = ({ comments = [], rideId }) => {
   const handleEditComment = async (commentId) => {
     try {
       await editComment({
-        variables: { rideId, commentId, commentText: editText }
+        variables: { rideId, commentId, commentText: editText },
       });
       setEditMode(null);
       setEditText('');
       toast({
-        title: "Comment updated successfully.",
-        status: "success",
+        title: 'Comment updated successfully.',
+        status: 'success',
         duration: 3000,
         isClosable: true,
       });
@@ -76,17 +76,17 @@ const CommentList = ({ comments = [], rideId }) => {
     const isEditing = editMode === comment._id;
 
     return isEditing ? (
-      <ButtonGroup justifyContent="center" size="sm">
+      <ButtonGroup justifyContent='center' size='sm'>
         <Button
-          size="sm"
-          colorScheme="blue"
+          size='sm'
+          colorScheme='blue'
           onClick={() => handleEditComment(comment._id)}
         >
           Save
         </Button>
         <Button
-          size="sm"
-          colorScheme="red"
+          size='sm'
+          colorScheme='red'
           onClick={() => {
             setEditMode(null);
             setEditText('');
@@ -96,10 +96,10 @@ const CommentList = ({ comments = [], rideId }) => {
         </Button>
       </ButtonGroup>
     ) : (
-      <Flex justifyContent="center">
+      <Flex justifyContent='center'>
         <Button
-          size="sm"
-          colorScheme="green"
+          size='sm'
+          colorScheme='green'
           onClick={() => {
             setEditMode(comment._id);
             setEditText(comment.commentText);
@@ -112,122 +112,135 @@ const CommentList = ({ comments = [], rideId }) => {
   };
 
   if (!comments.length) {
-    return <Box><Text fontSize="sm" ml={1}>No Comments Yet</Text></Box>;
+    return (
+      <Box>
+        <Text fontSize='sm' ml={1}>
+          No Comments Yet
+        </Text>
+      </Box>
+    );
   }
 
   return (
     <Box mt={4}>
-      {comments.slice().reverse().map((comment) => (
-        <Box
-          key={comment._id}
-          p={2}
-          mt={2}
-          borderWidth="1px"
-          borderRadius="lg"
-          overflow="visible"
-          position="relative"
-        >
-          {Auth.loggedIn() && currentUser === comment.commentAuthor && (
-            <Popover
-              isOpen={isPopoverOpen === comment._id}
-              onClose={() => setIsPopoverOpen(null)}
-              initialFocusRef={popoverRef}
-              placement="bottom-end"
-            >
-              <PopoverTrigger>
-                <IconButton
-                  icon={<FontAwesomeIcon icon={faEllipsis} />}
-                  variant="ghost"
-                  size="sm"
-                  position="absolute"
-                  top="8px"
-                  right="8px"
-                  onClick={() => setIsPopoverOpen(comment._id)}
-                />
-              </PopoverTrigger>
-              <PopoverContent ref={popoverRef} width="fit-content">
-                <PopoverArrow />
-                <PopoverHeader fontSize="sm">Manage Comment</PopoverHeader>
-                <PopoverBody>
-                  {editMode === comment._id ? (
-                    <Box>
-                      <Button
-                        width="100%"
-                        colorScheme="blue"
-                        size="sm"
-                        rounded="full"
-                        onClick={() => handleEditComment(comment._id)}
-                      >
-                        Save
-                      </Button>
-                    </Box>
-                  ) : (
-                    <Button
-                      width="100%"
-                      colorScheme="green"
-                      size="sm"
-                      rounded="full"
-                      onClick={() => {
-                        setEditMode(comment._id);
-                        setEditText(comment.commentText);
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  )}
-                </PopoverBody>
-                <PopoverBody>
-                  <Button
-                    width="100%"
-                    colorScheme="red"
-                    size="sm"
-                    rounded="full"
-                    onClick={() => handleRemoveComment(comment._id)}
-                  >
-                    Remove
-                  </Button>
-                </PopoverBody>
-              </PopoverContent>
-            </Popover>
-          )}
-          <Flex alignItems="center">
-            <Avatar name={comment.commentAuthor} size="xs" mr={2} />
-            <Box flex="1">
-              <Text
-                fontWeight="bold"
-                fontSize="sm"
-                mr={1}
-                color="gray.600"
+      {comments
+        .slice()
+        .reverse()
+        .map((comment) => (
+          <Box
+            key={comment._id}
+            p={2}
+            mt={2}
+            borderWidth='1px'
+            borderRadius='lg'
+            overflow='visible'
+            position='relative'
+          >
+            {Auth.loggedIn() && currentUser === comment.commentAuthor && (
+              <Popover
+                isOpen={isPopoverOpen === comment._id}
+                onClose={() => setIsPopoverOpen(null)}
+                initialFocusRef={popoverRef}
+                placement='bottom-end'
               >
-                {comment.commentAuthor}
-              </Text>
-              <Text fontSize="xs" color="gray.400">
-                {comment.createdAt}
-              </Text>
-              {editMode === comment._id ? (
-                <Input
-                  value={editText}
-                  onChange={(e) => setEditText(e.target.value)}
-                  mt="1"
-                  wordBreak="break-word"
-                  lineHeight="1.3"
-                  fontSize="sm"
-                  maxWidth="90%"
-                />
-              ) : (
-                <Text
-                  mt="1"
-                  wordBreak="break-word"
-                  lineHeight="1.3"
-                  fontSize="sm"
-                >
-                  {comment.commentText}
-                </Text>
-              )}
-            </Box>
-          </Flex>
-        </Box>
-      ))}
+                <PopoverTrigger>
+                  <IconButton
+                    icon={<FontAwesomeIcon icon={faEllipsis} />}
+                    variant='ghost'
+                    size='sm'
+                    position='absolute'
+                    top='8px'
+                    right='8px'
+                    onClick={() => setIsPopoverOpen(comment._id)}
+                  />
+                </PopoverTrigger>
+                <PopoverContent ref={popoverRef} width='fit-content'>
+                  <PopoverArrow />
+                  <PopoverHeader fontSize='sm'>Manage Comment</PopoverHeader>
+                  <PopoverBody>
+                    {editMode === comment._id ? (
+                      <Box>
+                        <Button
+                          width='100%'
+                          colorScheme='blue'
+                          size='sm'
+                          rounded='full'
+                          onClick={() => handleEditComment(comment._id)}
+                        >
+                          Save
+                        </Button>
+                      </Box>
+                    ) : (
+                      <Button
+                        width='100%'
+                        colorScheme='green'
+                        size='sm'
+                        rounded='full'
+                        onClick={() => {
+                          setEditMode(comment._id);
+                          setEditText(comment.commentText);
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
+                  </PopoverBody>
+                  <PopoverBody>
+                    <Button
+                      width='100%'
+                      colorScheme='red'
+                      size='sm'
+                      rounded='full'
+                      onClick={() => handleRemoveComment(comment._id)}
+                    >
+                      Remove
+                    </Button>
+                  </PopoverBody>
+                </PopoverContent>
+              </Popover>
+            )}
+            <Flex alignItems='center'>
+              <Box flex='1'>
+                <Flex alignItems='center'>
+                  <Avatar name={comment.commentAuthor} size='xs' mr={2} />
+                  <Box>
+                    <Text
+                      fontWeight='bold'
+                      fontSize='sm'
+                      mr={1}
+                      color='gray.600'
+                    >
+                      {comment.commentAuthor}
+                    </Text>
+                    <Text fontSize='xs' color='gray.400'>
+                      {comment.createdAt}
+                    </Text>
+                  </Box>
+                </Flex>
+                {editMode === comment._id ? (
+                  <Input
+                    value={editText}
+                    onChange={(e) => setEditText(e.target.value)}
+                    mt='1'
+                    wordBreak='break-word'
+                    lineHeight='1.3'
+                    fontSize='sm'
+                    maxWidth='90%'
+                  />
+                ) : (
+                  <Text
+                    mt='1'
+                    wordBreak='break-word'
+                    lineHeight='1.3'
+                    fontSize='sm'
+                  >
+                    {comment.commentText}
+                  </Text>
+                )}
+              </Box>
+            </Flex>
+          </Box>
+        ))}
     </Box>
   );
 };
