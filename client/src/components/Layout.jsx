@@ -1,9 +1,8 @@
-// src/components/Layout.jsx
 import { Box } from '@chakra-ui/react';
 
 const Layout = ({ children }) => {
   return (
-    <Box maxW='900px' mx='auto' p={4}>
+    <Box maxW='900px' mx='auto' p={3}>
       {children}
     </Box>
   );

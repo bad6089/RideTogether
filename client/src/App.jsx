@@ -34,12 +34,14 @@ const client = new ApolloClient({
 
 function App() {
   const location = useLocation();
-  const hideNavigation = ['/rides/', '/profiles/', '/me'].some(path => location.pathname.startsWith(path));
+  const hideNavigation = ['/rides/', '/profiles/', '/me'].some((path) =>
+    location.pathname.startsWith(path)
+  );
 
   return (
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
-        <div className="flex-column justify-flex-start min-100-vh">
+        <div className='flex-column justify-flex-start min-100-vh'>
           <Header />
           <Layout>
             {!hideNavigation && <Navigation />}

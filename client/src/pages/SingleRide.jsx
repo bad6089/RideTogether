@@ -36,7 +36,7 @@ import CommentList from '../components/CommentList';
 import CommentForm from '../components/CommentForm';
 import Layout from '../components/Layout';
 import Auth from '../utils/auth';
-import GoogleMapsIcon from '../assets/google-maps-svgrepo-com.svg'; // Import the SVG icon
+import GoogleMapsIcon from '../assets/google-maps-svgrepo-com.svg';
 
 const SingleRide = () => {
   const { id: rideId } = useParams();
@@ -137,6 +137,10 @@ const SingleRide = () => {
     );
   }
 
+  const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
+    ride.origin
+  )}&destination=${encodeURIComponent(ride.destination)}`;
+
   return (
     <Layout>
       <Box my={3}>
@@ -162,21 +166,30 @@ const SingleRide = () => {
                     {ride.rideAuthor}
                   </Text>
                   <Text fontSize='sm'>
-                    {ride.rideAuthor === currentUser ? 'You' : ''} posted this ride {ride.createdAt}
+                    {ride.rideAuthor === currentUser ? 'You' : ''} posted this
+                    ride {ride.createdAt}
                   </Text>
                 </Box>
               </Flex>
             </Box>
             <Flex alignItems='center' ml={2}>
-              <Text mr={2} fontSize='md' display={{ base: 'none', md: 'inline' }}>
+              <Text
+                mr={2}
+                fontSize='md'
+                display={{ base: 'none', md: 'inline' }}
+              >
                 {ride.isDriver ? 'Driver' : 'Passenger'}
               </Text>
-              <FontAwesomeIcon icon={ride.isDriver ? faCar : faPersonWalkingLuggage} color='#808080' />
+              <FontAwesomeIcon
+                icon={ride.isDriver ? faCar : faPersonWalkingLuggage}
+                color='#808080'
+              />
               {ride.rideAuthor === currentUser && (
                 <Popover
                   isOpen={isPopoverOpen}
                   onClose={() => setIsPopoverOpen(false)}
                   initialFocusRef={popoverRef}
+                  placement='bottom-start'
                 >
                   <PopoverTrigger>
                     <IconButton
@@ -187,11 +200,16 @@ const SingleRide = () => {
                       onClick={() => setIsPopoverOpen(!isPopoverOpen)}
                     />
                   </PopoverTrigger>
-                  <PopoverContent ref={popoverRef} width="fit-content">
+                  <PopoverContent ref={popoverRef} width='fit-content'>
                     <PopoverArrow />
                     <PopoverHeader fontSize='sm'>Manage Ride</PopoverHeader>
                     <PopoverBody>
-                      <Button colorScheme='red' size='sm' rounded='full' onClick={() => handleRemoveRide(ride._id)}>
+                      <Button
+                        colorScheme='red'
+                        size='sm'
+                        rounded='full'
+                        onClick={() => handleRemoveRide(ride._id)}
+                      >
                         Remove Ride
                       </Button>
                     </PopoverBody>
@@ -201,18 +219,50 @@ const SingleRide = () => {
             </Flex>
           </Flex>
           <Box p={4} mt='-4'>
-            <Divider mb='2' pl='' orientation='horizontal' borderColor='gray.300' />
+            <Divider
+              mb='2'
+              pl=''
+              orientation='horizontal'
+              borderColor='gray.300'
+            />
             <Flex alignItems='center'>
               <Box position='relative' mr={3}>
                 <FontAwesomeIcon icon={faCircleDot} color='#2C7A7B' />
-                <Box position='absolute' top='1.25rem' left='0.75rem' w='1px' h='3rem' bg=''>
-                  <Box position='absolute' top='0.4rem' left='-8px' w='7px' h='7px' borderRadius='full' bg='gray.300'></Box>
-                  <Box position='absolute' top='1.3rem' left='-8px' w='7px' h='7px' borderRadius='full' bg='gray.300'></Box>
+                <Box
+                  position='absolute'
+                  top='1.25rem'
+                  left='0.75rem'
+                  w='1px'
+                  h='3rem'
+                  bg=''
+                >
+                  <Box
+                    position='absolute'
+                    top='0.4rem'
+                    left='-8px'
+                    w='7px'
+                    h='7px'
+                    borderRadius='full'
+                    bg='gray.300'
+                  ></Box>
+                  <Box
+                    position='absolute'
+                    top='1.3rem'
+                    left='-8px'
+                    w='7px'
+                    h='7px'
+                    borderRadius='full'
+                    bg='gray.300'
+                  ></Box>
                 </Box>
               </Box>
               <Box>
-                <Text color='gray.500' fontSize='sm'>Origin</Text>
-                <Text fontWeight='bold' fontSize='md'>{ride.origin}</Text>
+                <Text color='gray.500' fontSize='sm'>
+                  Origin
+                </Text>
+                <Text fontWeight='bold' fontSize='md'>
+                  {ride.origin}
+                </Text>
               </Box>
             </Flex>
             <Flex alignItems='center' mt={2}>
@@ -220,8 +270,12 @@ const SingleRide = () => {
                 <FontAwesomeIcon icon={faMapMarkerAlt} color='#B22222' />
               </Box>
               <Box pl='1' mt=''>
-                <Text color='gray.500' fontSize='sm'>Destination</Text>
-                <Text fontWeight='bold' fontSize='md'>{ride.destination}</Text>
+                <Text color='gray.500' fontSize='sm'>
+                  Destination
+                </Text>
+                <Text fontWeight='bold' fontSize='md'>
+                  {ride.destination}
+                </Text>
               </Box>
             </Flex>
             <Flex alignItems='center' mt={2}>
@@ -229,24 +283,39 @@ const SingleRide = () => {
                 <FontAwesomeIcon icon={faClock} color='#808080' />
               </Box>
               <Box pl={-1} pr={3}>
-                <Text color='gray.500' fontSize='sm'>Time</Text>
-                <Text fontWeight='bold' fontSize='md'>{ride.time}</Text>
+                <Text color='gray.500' fontSize='sm'>
+                  Time
+                </Text>
+                <Text fontWeight='bold' fontSize='md'>
+                  {ride.time}
+                </Text>
               </Box>
               <Box position='relative' ml={6} mr={3} left='1px'>
                 <FontAwesomeIcon icon={faCalendarAlt} color='#808080' />
               </Box>
               <Box pl={-1}>
-                <Text color='gray.500' fontSize='sm'>Date</Text>
-                <Text fontWeight='bold' fontSize='md'>{ride.date}</Text>
+                <Text color='gray.500' fontSize='sm'>
+                  Date
+                </Text>
+                <Text fontWeight='bold' fontSize='md'>
+                  {ride.date}
+                </Text>
               </Box>
-              {/* Google Maps icon */}
-              <Box ml="auto" display="flex" alignItems="center">
-              <a href={`https://www.google.com/maps`} target="_blank" rel="noopener noreferrer">
-                  <img src={GoogleMapsIcon} alt="Google Maps" style={{ height: '36px', marginRight: '0.3rem' }} />
-              </a>
+              <Box ml='auto' display='flex' alignItems='center'>
+                <a
+                  href={googleMapsUrl}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                >
+                  <img
+                    src={GoogleMapsIcon}
+                    alt='Google Maps'
+                    style={{ height: '36px', marginRight: '0.3rem' }}
+                  />
+                </a>
               </Box>
             </Flex>
-            
+
             <CommentForm rideId={ride._id} />
             <CommentList comments={ride.comments} rideId={ride._id} />
           </Box>

@@ -12,13 +12,20 @@ import {
   Switch,
   HStack,
   Flex,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react';
 import { format } from 'date-fns';
+import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faGlobe, faMapMarker } from '@fortawesome/free-solid-svg-icons';
+
 import { ADD_RIDE } from '../utils/mutations';
 import { QUERY_RIDES, QUERY_ME } from '../utils/queries';
 import Auth from '../utils/auth';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
+import AutocompleteInput from '../components/AutocompleteInput';
 
 const RideForm = () => {
   const {
@@ -37,9 +44,6 @@ const RideForm = () => {
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [isDriver, setIsDriver] = useState(false);
-
-  const [characterCountOrigin, setCharacterCountOrigin] = useState(0);
-  const [characterCountDestination, setCharacterCountDestination] = useState(0);
 
   const [addRide, { error }] = useMutation(ADD_RIDE, {
     refetchQueries: [{ query: QUERY_RIDES }, { query: QUERY_ME }],
@@ -100,21 +104,7 @@ const RideForm = () => {
     }
   };
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-
-    if (name === 'origin' && value.length <= 280) {
-      setOrigin(value);
-      setCharacterCountOrigin(value.length);
-    } else if (name === 'destination' && value.length <= 280) {
-      setDestination(value);
-      setCharacterCountDestination(value.length);
-    } else if (name === 'date') {
-      setDate(value);
-    } else if (name === 'time') {
-      setTime(value);
-    }
-  };
+  const minDate = new Date().toISOString().split('T')[0];
 
   return (
     <Box
@@ -127,6 +117,13 @@ const RideForm = () => {
       borderColor='gray.300'
       mx='auto'
     >
+      <style>{`
+        /* Hide default date and time icons */
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+          display: none;
+        }
+      `}</style>
       <form onSubmit={handleFormSubmit}>
         <Text
           fontSize='xl'
@@ -138,52 +135,69 @@ const RideForm = () => {
           Where are you heading to?
         </Text>
         <FormControl mb={4}>
-          <Input
-            placeholder='Origin'
-            name='origin'
-            value={origin}
-            onChange={handleChange}
-            bg=''
-            rounded='full'
-            pl={10}
-            mb={2}
-          />
+          <InputGroup>
+            <InputLeftElement pointerEvents='none'>
+              <FontAwesomeIcon icon={faGlobe} color='#CBD5E0' />
+            </InputLeftElement>
+            <AutocompleteInput
+              placeholder='Origin'
+              value={origin}
+              onChange={(value) => setOrigin(value)}
+              rounded='full'
+              width='100%'
+            />
+          </InputGroup>
         </FormControl>
         <FormControl mb={4}>
-          <Input
-            placeholder='Destination'
-            name='destination'
-            value={destination}
-            onChange={handleChange}
-            bg=''
-            rounded='full'
-            pl={10}
-            mb={2}
-          />
+          <InputGroup>
+            <InputLeftElement pointerEvents='none'>
+              <FontAwesomeIcon icon={faMapMarker} color='#CBD5E0' />
+            </InputLeftElement>
+            <AutocompleteInput
+              placeholder='Destination'
+              value={destination}
+              onChange={(value) => setDestination(value)}
+              rounded='full'
+              width='100%'
+            />
+          </InputGroup>
         </FormControl>
         <FormControl mb={4}>
-          <Input
-            type='date'
-            name='date'
-            value={date}
-            onChange={handleChange}
-            bg=''
-            rounded='full'
-            pl={10}
-            mb={2}
-          />
+          <InputGroup>
+            <InputLeftElement pointerEvents='none'>
+              <CalendarIcon color='gray.300' />
+            </InputLeftElement>
+            <Input
+              type='date'
+              name='date'
+              min={minDate}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              bg=''
+              rounded='full'
+              mb={2}
+              width='100%'
+              onClick={(e) => e.target.showPicker()}
+            />
+          </InputGroup>
         </FormControl>
         <FormControl mb={4}>
-          <Input
-            type='time'
-            name='time'
-            value={time}
-            onChange={handleChange}
-            bg=''
-            rounded='full'
-            pl={10}
-            mb={2}
-          />
+          <InputGroup>
+            <InputLeftElement pointerEvents='none'>
+              <TimeIcon color='gray.300' />
+            </InputLeftElement>
+            <Input
+              type='time'
+              name='time'
+              value={time}
+              onChange={(e) => setTime(e.target.value)}
+              bg=''
+              rounded='full'
+              mb={2}
+              width='100%'
+              onClick={(e) => e.target.showPicker()}
+            />
+          </InputGroup>
         </FormControl>
         <Flex
           alignItems='center'
