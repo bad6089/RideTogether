@@ -1,2 +1,0 @@
-# carpoolhub
-Final Project

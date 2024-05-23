@@ -1,248 +1,148 @@
-import { useState, useRef } from 'react';
+import { useState } from 'react';
 import { useMutation } from '@apollo/client';
 import {
   Box,
+  Divider,
   Button,
-  Flex,
-  Avatar,
+  FormControl,
+  Textarea,
   Text,
-  IconButton,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverHeader,
-  PopoverBody,
-  Input,
   useToast,
-  ButtonGroup,
-  useOutsideClick,
+  useDisclosure,
+  Flex,
 } from '@chakra-ui/react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEllipsis } from '@fortawesome/free-solid-svg-icons';
-import { REMOVE_COMMENT, EDIT_COMMENT } from '../utils/mutations';
-import { QUERY_RIDES } from '../utils/queries';
+
+import { ADD_COMMENT } from '../utils/mutations';
 import Auth from '../utils/auth';
+import Login from '../pages/Login';
+import Signup from '../pages/Signup';
 
-const CommentList = ({ comments = [], rideId }) => {
-  const [editMode, setEditMode] = useState(null);
-  const [editText, setEditText] = useState('');
+const CommentForm = ({ rideId }) => {
+  const {
+    isOpen: isLoginOpen,
+    onOpen: onLoginOpen,
+    onClose: onLoginClose,
+  } = useDisclosure();
+  const {
+    isOpen: isSignupOpen,
+    onOpen: onSignupOpen,
+    onClose: onSignupClose,
+  } = useDisclosure();
+
+  const [commentText, setCommentText] = useState('');
+  const [characterCount, setCharacterCount] = useState(0);
+  const [addComment, { error }] = useMutation(ADD_COMMENT);
   const toast = useToast();
-  const [isPopoverOpen, setIsPopoverOpen] = useState(null);
-  const popoverRef = useRef();
 
-  useOutsideClick({
-    ref: popoverRef,
-    handler: () => setIsPopoverOpen(null),
-  });
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
 
-  const [removeComment] = useMutation(REMOVE_COMMENT, {
-    refetchQueries: [{ query: QUERY_RIDES }],
-  });
-
-  const [editComment] = useMutation(EDIT_COMMENT, {
-    refetchQueries: [{ query: QUERY_RIDES }],
-  });
-
-  const handleEditComment = async (commentId) => {
     try {
-      await editComment({
-        variables: { rideId, commentId, commentText: editText },
+      await addComment({
+        variables: {
+          rideId,
+          commentText,
+          commentAuthor: Auth.getProfile().data.username,
+        },
       });
-      setEditMode(null);
-      setEditText('');
+
+      setCommentText('');
       toast({
-        title: 'Comment updated successfully.',
+        title: 'Comment added.',
+        description: 'Your comment has been added successfully.',
         status: 'success',
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       });
     } catch (err) {
       console.error(err);
+      toast({
+        title: 'Error adding comment.',
+        description: err.message,
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
     }
   };
 
-  const handleRemoveComment = async (commentId) => {
-    try {
-      await removeComment({ variables: { rideId, commentId } });
-    } catch (err) {
-      console.error(err);
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    if (name === 'commentText' && value.length <= 280) {
+      setCommentText(value);
+      setCharacterCount(value.length);
     }
   };
-
-  const currentUser = Auth.loggedIn() ? Auth.getProfile().data.username : null;
-
-  const EditableControls = ({ comment }) => {
-    const isEditing = editMode === comment._id;
-
-    return isEditing ? (
-      <ButtonGroup justifyContent='center' size='sm'>
-        <Button
-          size='sm'
-          colorScheme='blue'
-          onClick={() => handleEditComment(comment._id)}
-        >
-          Save
-        </Button>
-        <Button
-          size='sm'
-          colorScheme='red'
-          onClick={() => {
-            setEditMode(null);
-            setEditText('');
-          }}
-        >
-          Cancel
-        </Button>
-      </ButtonGroup>
-    ) : (
-      <Flex justifyContent='center'>
-        <Button
-          size='sm'
-          colorScheme='green'
-          onClick={() => {
-            setEditMode(comment._id);
-            setEditText(comment.commentText);
-          }}
-        >
-          Edit
-        </Button>
-      </Flex>
-    );
-  };
-
-  if (!comments.length) {
-    return (
-      <Box>
-        <Text fontSize='sm' ml={1}>
-          No Comments Yet
-        </Text>
-      </Box>
-    );
-  }
 
   return (
-    <Box mt={4}>
-      {comments
-        .slice()
-        .reverse()
-        .map((comment) => (
-          <Box
-            key={comment._id}
-            p={2}
-            mt={2}
-            borderWidth='1px'
-            borderRadius='lg'
-            overflow='visible'
-            position='relative'
-          >
-            {Auth.loggedIn() && currentUser === comment.commentAuthor && (
-              <Popover
-                isOpen={isPopoverOpen === comment._id}
-                onClose={() => setIsPopoverOpen(null)}
-                initialFocusRef={popoverRef}
-                placement='bottom-end'
+    <Box>
+      <Divider
+        mt='3'
+        mb='3'
+        pl=''
+        orientation='horizontal'
+        borderColor='gray.300'
+      />
+      {Auth.loggedIn() ? (
+        <>
+          <form onSubmit={handleFormSubmit}>
+            <FormControl mb={2}>
+              <Textarea
+                id='commentText'
+                name='commentText'
+                placeholder='Add your request...'
+                value={commentText}
+                onChange={handleChange}
+                resize='vertical'
+              />
+            </FormControl>
+            <Flex justifyContent='space-between' alignItems='center'>
+              <Text
+                ml='1'
+                fontSize='sm'
+                color={characterCount === 280 || error ? 'red.500' : 'black'}
               >
-                <PopoverTrigger>
-                  <IconButton
-                    icon={<FontAwesomeIcon icon={faEllipsis} />}
-                    variant='ghost'
-                    size='sm'
-                    position='absolute'
-                    top='8px'
-                    right='8px'
-                    onClick={() => setIsPopoverOpen(comment._id)}
-                  />
-                </PopoverTrigger>
-                <PopoverContent ref={popoverRef} width='fit-content'>
-                  <PopoverArrow />
-                  <PopoverHeader fontSize='sm'>Manage Comment</PopoverHeader>
-                  <PopoverBody>
-                    {editMode === comment._id ? (
-                      <Box>
-                        <Button
-                          width='100%'
-                          colorScheme='blue'
-                          size='sm'
-                          rounded='full'
-                          onClick={() => handleEditComment(comment._id)}
-                        >
-                          Save
-                        </Button>
-                      </Box>
-                    ) : (
-                      <Button
-                        width='100%'
-                        colorScheme='green'
-                        size='sm'
-                        rounded='full'
-                        onClick={() => {
-                          setEditMode(comment._id);
-                          setEditText(comment.commentText);
-                        }}
-                      >
-                        Edit
-                      </Button>
-                    )}
-                  </PopoverBody>
-                  <PopoverBody>
-                    <Button
-                      width='100%'
-                      colorScheme='red'
-                      size='sm'
-                      rounded='full'
-                      onClick={() => handleRemoveComment(comment._id)}
-                    >
-                      Remove
-                    </Button>
-                  </PopoverBody>
-                </PopoverContent>
-              </Popover>
-            )}
-            <Flex alignItems='center'>
-              <Box flex='1'>
-                <Flex alignItems='center'>
-                  <Avatar name={comment.commentAuthor} size='xs' mr={2} />
-                  <Box>
-                    <Text
-                      fontWeight='bold'
-                      fontSize='sm'
-                      mr={1}
-                      color='gray.600'
-                    >
-                      {comment.commentAuthor}
-                    </Text>
-                    <Text fontSize='xs' color='gray.400'>
-                      {comment.createdAt}
-                    </Text>
-                  </Box>
-                </Flex>
-                {editMode === comment._id ? (
-                  <Input
-                    value={editText}
-                    onChange={(e) => setEditText(e.target.value)}
-                    mt='1'
-                    wordBreak='break-word'
-                    lineHeight='1.3'
-                    fontSize='sm'
-                    maxWidth='90%'
-                  />
-                ) : (
-                  <Text
-                    mt='1'
-                    wordBreak='break-word'
-                    lineHeight='1.3'
-                    fontSize='sm'
-                  >
-                    {comment.commentText}
+                Character Count: {characterCount}/280
+                {error && (
+                  <Text ml={2} color='red.500'>
+                    {error.message}
                   </Text>
                 )}
-              </Box>
+              </Text>
+              <Button mb={3} colorScheme='blue' rounded='full' type='submit'>
+                Let's Plan
+              </Button>
             </Flex>
-          </Box>
-        ))}
+          </form>
+        </>
+      ) : (
+        <Text fontSize='sm'>
+          You need to be logged in to request the ride. Please{' '}
+          <Button
+            fontSize='sm'
+            variant='link'
+            colorScheme='blue'
+            onClick={onLoginOpen}
+          >
+            login
+          </Button>{' '}
+          or{' '}
+          <Button
+            fontSize='sm'
+            variant='link'
+            colorScheme='blue'
+            onClick={onSignupOpen}
+          >
+            signup
+          </Button>
+          .
+        </Text>
+      )}
+      <Login isOpen={isLoginOpen} onClose={onLoginClose} />
+      <Signup isOpen={isSignupOpen} onClose={onSignupClose} />
     </Box>
   );
 };
 
-export default CommentList;
+export default CommentForm;
