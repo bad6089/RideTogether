@@ -110,12 +110,14 @@ const RideForm = () => {
     <Box
       bg='white'
       p={6}
+      mt={4}
       rounded='md'
       width='100%'
-      borderWidth='1px'
-      borderRadius='3xl'
+      borderWidth=''
+      borderRadius='2rem'
       borderColor='gray.300'
       mx='auto'
+      boxShadow='xs'
     >
       <style>{`
         /* Hide default date and time icons */
@@ -216,6 +218,7 @@ const RideForm = () => {
                 onChange={() => setIsDriver(!isDriver)}
               />
             </HStack>
+            
             <Button colorScheme='blue' type='submit' rounded='full'>
               Submit
             </Button>

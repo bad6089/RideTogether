@@ -42,12 +42,12 @@ function App() {
     <ApolloProvider client={client}>
       <ChakraProvider theme={theme}>
         <div className='flex-column justify-flex-start min-100-vh'>
-          <Header />
           <Layout>
-            {!hideNavigation && <Navigation />}
+            {/* {!hideNavigation && <Navigation />} */}
+            <Header />
             <Outlet />
+            <Footer />
           </Layout>
-          <Footer />
         </div>
       </ChakraProvider>
     </ApolloProvider>

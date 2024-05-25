@@ -5,7 +5,6 @@ import {
   Divider,
   Button,
   FormControl,
-  FormLabel,
   Textarea,
   Text,
   useToast,
@@ -78,34 +77,17 @@ const CommentForm = ({ rideId }) => {
 
   return (
     <Box>
-      {/* <Text fontSize='xl' mb={4}>
-        Do you need a lift?
-      </Text> */}
-          <Divider
-              mt='3'
-              mb='3'
-              pl=''
-              orientation='horizontal'
-              borderColor='gray.300'
-            />
+      <Divider
+        mt='3'
+        mb='3'
+        pl=''
+        orientation='horizontal'
+        borderColor='gray.300'
+      />
       {Auth.loggedIn() ? (
         <>
-          <Text
-            ml='1'
-            mb={2}
-            fontSize='sm'
-            color= {characterCount === 280 || error ? 'red.500' : 'black'}
-          >
-            Character Count: {characterCount}/280
-            {error && (
-              <Text ml={2} color='red.500'>
-                {error.message}
-              </Text>
-            )}
-          </Text>
           <form onSubmit={handleFormSubmit}>
             <FormControl mb={2}>
-              {/* <FormLabel htmlFor='commentText'>Add your request</FormLabel> */}
               <Textarea
                 id='commentText'
                 name='commentText'
@@ -115,24 +97,46 @@ const CommentForm = ({ rideId }) => {
                 resize='vertical'
               />
             </FormControl>
-            <Flex justifyContent='flex-end'>
-            <Button mb={3} colorScheme='blue' rounded='full' type='submit'>
-              Let's Plan
-            </Button>
+            <Flex justifyContent='space-between' alignItems='center'>
+              <Text
+                mt='-8'
+                ml='1'
+                fontSize='sm'
+                color={characterCount === 280 || error ? 'red.500' : 'black'}
+              >
+                Character Count: {characterCount}/280
+                {error && (
+                  <Text ml={2} color='red.500'>
+                    {error.message}
+                  </Text>
+                )}
+              </Text>
+              <Button mb={3} colorScheme='blue' rounded='full' type='submit'>
+                Let's Plan
+              </Button>
             </Flex>
           </form>
         </>
       ) : (
         <Text fontSize='sm'>
           You need to be logged in to request the ride. Please{' '}
-          <Button fontSize='sm' variant='link' colorScheme='blue' onClick={onLoginOpen}>
+          <Button
+            fontSize='sm'
+            variant='link'
+            colorScheme='blue'
+            onClick={onLoginOpen}
+          >
             login
           </Button>{' '}
           or{' '}
-          <Button fontSize='sm' variant='link' colorScheme='blue' onClick={onSignupOpen}>
+          <Button
+            fontSize='sm'
+            variant='link'
+            colorScheme='blue'
+            onClick={onSignupOpen}
+          >
             signup
           </Button>
-          .
         </Text>
       )}
       <Login isOpen={isLoginOpen} onClose={onLoginClose} />

@@ -35,9 +35,17 @@ const AutocompleteInput = ({ placeholder, value, onChange }) => {
     return () => clearTimeout(debounceTimer);
   }, [value]);
 
-  const handleSuggestionClick = (suggestion) => {
+  const handleSuggestionClick = async (suggestion) => {
     onChange(suggestion);
     setSuggestions([]);
+
+    try {
+      const geocodeResponse = await axios.get(`/api/geocode?address=${suggestion}`);
+      const { lat, lng } = geocodeResponse.data;
+      console.log('Latitude:', lat, 'Longitude:', lng);
+    } catch (error) {
+      console.error('Error fetching geocode data:', error);
+    }
   };
 
   return (
