@@ -26,6 +26,7 @@ import Login from '../pages/Login';
 import Signup from '../pages/Signup';
 import Logo from '../assets/logo.svg';
 import Navigation from './Navigation'; // Import the new Navigation component
+import CustomButton from '../components/CustomButton';
 
 const Header = () => {
   const [selectedTab, setSelectedTab] = useState(0);
@@ -74,12 +75,25 @@ const Header = () => {
 
         {/* Logo and text */}
         <Flex alignItems='center'>
-          <img src={Logo} alt='Logo' width='25px' />
-          {Auth.loggedIn() && (
-            <Text fontSize='3xl' fontWeight='bold' color='#150035' ml='2'>
-              Carpool
-            </Text>
-          )}
+          <Link to='/'>
+            <img src={Logo} alt='Logo' width='25px' />
+          </Link>
+          {Auth.loggedIn() || (!Auth.loggedIn() && window.innerWidth >= 768) ? (
+            <Link to='/' style={{ textDecoration: 'none' }}>
+              <Text
+                fontSize='3xl'
+                fontWeight='extrabold'
+                color='#150035'
+                ml='2'
+                display={{
+                  base: Auth.loggedIn() ? 'block' : 'none',
+                  md: 'block',
+                }}
+              >
+                Carpool
+              </Text>
+            </Link>
+          ) : null}
         </Flex>
 
         {/* Center buttons for larger screens */}
@@ -128,7 +142,7 @@ const Header = () => {
                         </Link>
                       </Flex>
                     </PopoverHeader>
-                    <PopoverBody>
+                    <PopoverBody align='center'>
                       <Button borderRadius='full' onClick={logout}>
                         Logout
                       </Button>
@@ -138,7 +152,7 @@ const Header = () => {
                 <Box
                   ml={2}
                   p={2}
-                  bg='#f5f5f5'
+                  bg='#f8f9fa'
                   borderRadius='full'
                   display={{ base: 'none', md: 'flex' }}
                   alignItems='center'
@@ -163,17 +177,9 @@ const Header = () => {
                   Login
                 </Button>
                 <Login isOpen={isLoginOpen} onClose={onLoginClose} />
-                <Button
-                  borderRadius='full'
-                  ml='px'
-                  onClick={onSignupOpen}
-                  bg='#150035'
-                  color='#FFFFFF'
-                  _hover={{ bg: '#150C5F', color: '#FFFFFF' }}
-                  _active={{ bg: '#352E72', color: '#FFFFFF' }}
-                >
+                <CustomButton ml='px' onClick={onSignupOpen}>
                   Sign Up
-                </Button>
+                </CustomButton>
                 <Signup isOpen={isSignupOpen} onClose={onSignupClose} />
               </>
             )}

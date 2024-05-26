@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Box, Button, Flex } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 const Navigation = ({
   selectedTab,
@@ -8,6 +8,24 @@ const Navigation = ({
   isMobile,
   setIsMenuOpen,
 }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    switch (location.pathname) {
+      case '/':
+        setSelectedTab(0);
+        break;
+      case '/about':
+        setSelectedTab(1);
+        break;
+      case '/support':
+        setSelectedTab(2);
+        break;
+      default:
+        setSelectedTab(null); // No tab selected for other routes
+    }
+  }, [location.pathname, setSelectedTab]);
+
   const handleClick = (tabIndex) => {
     setSelectedTab(tabIndex);
     if (isMobile) {

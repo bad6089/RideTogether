@@ -1,10 +1,12 @@
+// Home.js
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
-import { Box, Flex, Spinner, Button } from '@chakra-ui/react';
+import { Box, Flex, Spinner } from '@chakra-ui/react';
 
 import RideList from '../components/RideList';
 import RideForm from '../components/RideForm';
 import Layout from '../components/Layout';
+import CustomButton from '../components/CustomButton'; // Import CustomButton
 
 import { QUERY_RIDES } from '../utils/queries';
 
@@ -30,35 +32,32 @@ const Home = () => {
         align='center'
         direction='column'
         width='100%'
-        mt={4}
+        mt={5}
       >
         <Box width='100%' mb={4}>
           <RideForm />
         </Box>
         <Box width='100%' pb={4} mt={8} mb={1}>
-          <Button
-            borderRadius='full'
+          <CustomButton
             onClick={() => handleFilter('all')}
-            colorScheme={filter === 'all' ? 'blue' : 'gray'}
+            bg={filter === 'all' ? '#150035' : '#847995'}
           >
             All
-          </Button>
-          <Button
-            borderRadius='full'
+          </CustomButton>
+          <CustomButton
             onClick={() => handleFilter('driver')}
-            colorScheme={filter === 'driver' ? 'blue' : 'gray'}
+            bg={filter === 'driver' ? '#150035' : '#847995'}
             ml={2}
           >
             Driver
-          </Button>
-          <Button
-            borderRadius='full'
+          </CustomButton>
+          <CustomButton
             onClick={() => handleFilter('passenger')}
-            colorScheme={filter === 'passenger' ? 'blue' : 'gray'}
+            bg={filter === 'passenger' ? '#150035' : '#847995'}
             ml={2}
           >
             Passenger
-          </Button>
+          </CustomButton>
         </Box>
         <Box width='100%' maxW='900px'>
           {loading ? (

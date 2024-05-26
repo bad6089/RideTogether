@@ -1,30 +1,26 @@
-import { Box, Button, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import Layout from './Layout';
+import CustomButton from '../components/CustomButton'; // Import CustomButton
 
 const Footer = () => {
   const location = useLocation();
   const navigate = useNavigate();
   return (
     <Layout>
-      <Box
-        as='footer'
-        w='100%'
-        bg='white'
-        p={4}
-        color='black'
-        textAlign='center'
-      >
+      <Box as='footer' w='100%' bg='' p={4} color='black' textAlign='center'>
         {location.pathname !== '/' && (
-          <Button
+          <CustomButton
             onClick={() => navigate(-1)}
-            colorScheme='blue'
             variant='solid'
             mb={3}
             rounded='full'
           >
-            &larr; Go Back
-          </Button>
+            <FontAwesomeIcon icon={faArrowLeft} /> {/* Use Font Awesome icon */}
+            &nbsp;Go Back
+          </CustomButton>
         )}
         <Text>
           Made with{' '}

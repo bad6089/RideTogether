@@ -7,10 +7,11 @@ const SupportMe = () => {
       <Box
         mt={4}
         p={6}
-        borderWidth='1px'
-        borderRadius='3xl'
-        borderColor='gray.300'
+        // borderWidth='1px'
+        borderRadius='2rem'
+        // borderColor='gray.300'
         bg='white'
+        boxShadow='xs'
       >
         <Heading as='h1' size='xl' mb={4} textAlign='center'>
           Support Me

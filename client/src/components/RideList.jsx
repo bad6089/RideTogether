@@ -34,6 +34,7 @@ import { QUERY_RIDES } from '../utils/queries';
 import Auth from '../utils/auth';
 import CommentAvatar from '../components/CommentAvatar';
 import GoogleMapsIcon from '../assets/google-maps-svgrepo-com.svg';
+import { useBreakpointValue } from '@chakra-ui/react';
 
 // Utility function to truncate text to a specified length
 const truncateText = (text, maxLength) => {
@@ -44,6 +45,9 @@ const truncateText = (text, maxLength) => {
 };
 
 const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
+  // Define character limits for mobile and desktop views
+  const characterLimit = useBreakpointValue({ base: 30, md: 85 });
+
   const [removeRide] = useMutation(REMOVE_RIDE, {
     refetchQueries: [{ query: QUERY_RIDES }],
   });
@@ -134,7 +138,7 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
             borderWidth=''
             borderRadius='2rem'
             overflow='hidden'
-            bg='white'
+            bg='#FFFFFF'
             mb={4}
             boxShadow='xs'
           >
@@ -142,15 +146,13 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
               alignItems='center'
               justifyContent='space-between'
               bg=''
-              color='gray.600'
-              p={4}
-            >
+              p={4}>
               <Box flex='1'>
                 {showUsername && (
                   <Flex alignItems='center'>
                     <Avatar name={ride.rideAuthor} mr={4} />
                     <Box>
-                      <Text fontWeight='bold' fontSize='lg'>
+                      <Text fontWeight='bold' fontSize='lg' color='#150035'>
                         {ride.rideAuthor}
                       </Text>
                       <Text fontSize='sm'>
@@ -222,7 +224,7 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
                     Origin
                   </Text>
                   <Text fontWeight='bold' fontSize='md'>
-                    {truncateText(ride.origin, 30)}
+                    {truncateText(ride.origin, characterLimit)}
                   </Text>
                 </Box>
               </Flex>
@@ -257,7 +259,7 @@ const RideList = ({ rides, title, showTitle = true, showUsername = true }) => {
                     Destination
                   </Text>
                   <Text fontWeight='bold' fontSize='md'>
-                    {truncateText(ride.destination, 30)}
+                    {truncateText(ride.destination, characterLimit)}
                   </Text>
                 </Box>
               </Flex>

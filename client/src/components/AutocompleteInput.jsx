@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import axios from 'axios';
 import {
   Input,
   Box,
@@ -8,67 +9,58 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react';
-import axios from 'axios';
 
-const AutocompleteInput = ({ placeholder, value, onChange }) => {
+const AutocompleteInput = ({ placeholder, value, onChange, rounded, width }) => {
   const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const fetchSuggestions = async () => {
-      if (value.length > 2) {
-        setLoading(true);
-        try {
-          const response = await axios.get(`/api/autocomplete?q=${value}`);
-          setSuggestions(response.data);
-        } catch (error) {
-          console.error('Error fetching autocomplete suggestions:', error);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setSuggestions([]);
-      }
-    };
+  const fetchSuggestions = async (input) => {
+    if (input.length < 3) {
+      setSuggestions([]);
+      return;
+    }
 
-    const debounceTimer = setTimeout(fetchSuggestions, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [value]);
-
-  const handleSuggestionClick = async (suggestion) => {
-    onChange(suggestion);
-    setSuggestions([]);
-
+    setLoading(true);
     try {
-      const geocodeResponse = await axios.get(`/api/geocode?address=${suggestion}`);
-      const { lat, lng } = geocodeResponse.data;
-      console.log('Latitude:', lat, 'Longitude:', lng);
+      const response = await axios.get(`/api/autocomplete?q=${input}`);
+      setSuggestions(response.data);
     } catch (error) {
-      console.error('Error fetching geocode data:', error);
+      console.error('Error fetching address suggestions:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleChange = (e) => {
+    const inputValue = e.target.value;
+    onChange(inputValue);
+    fetchSuggestions(inputValue);
+    setShowSuggestions(true);
+  };
+
+  const handleSelect = (suggestion) => {
+    onChange(suggestion.display_name);
+    console.log('Selected latitude:', suggestion.lat);
+    console.log('Selected longitude:', suggestion.lon);
+    setShowSuggestions(false);
+  };
+
   return (
-    <Box position='relative' width='100%'>
+    <Box position='relative' width={width}>
       <InputGroup>
-        <InputLeftElement pointerEvents='none'>
-        </InputLeftElement>
+        <InputLeftElement pointerEvents='none' />
         <Input
           placeholder={placeholder}
           value={value}
-          onChange={(e) => {
-            onChange(e.target.value);
-            if (e.target.value.length <= 2) {
-              setSuggestions([]);
-            }
-          }}
-          rounded='full'
+          onChange={handleChange}
+          rounded={rounded}
           bg=''
           pl={10}
         />
       </InputGroup>
       {loading && <Spinner size='sm' />}
-      {suggestions.length > 0 && (
+      {showSuggestions && suggestions.length > 0 && (
         <List
           zIndex='20'
           bg='white'
@@ -76,15 +68,18 @@ const AutocompleteInput = ({ placeholder, value, onChange }) => {
           borderRadius='md'
           mt='2'
           width='100%'
+          position='relative'
+          boxShadow='md'
         >
           {suggestions.map((suggestion, index) => (
             <ListItem
               key={index}
               p='2'
               _hover={{ bg: 'gray.100' }}
-              onClick={() => handleSuggestionClick(suggestion)}
+              onMouseDown={(e) => e.preventDefault()} // Prevent input blur
+              onClick={() => handleSelect(suggestion)}
             >
-              {suggestion}
+              {suggestion.display_name}
             </ListItem>
           ))}
         </List>

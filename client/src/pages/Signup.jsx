@@ -21,6 +21,7 @@ import {
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import CustomButton from '../components/CustomButton';
 
 const Signup = ({ isOpen, onOpen, onClose }) => {
   const [formState, setFormState] = useState({
@@ -62,7 +63,7 @@ const Signup = ({ isOpen, onOpen, onClose }) => {
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width={{ base: '90%', md: '' }}>
           <ModalHeader color='#150035'>Create Account</ModalHeader>
           <CloseButton
             position='absolute'
@@ -74,9 +75,7 @@ const Signup = ({ isOpen, onOpen, onClose }) => {
             {data ? (
               <Box mb='15'>
                 Success! You may now head{' '}
-                <Link to='/'>
-                  back to the homepage.
-                </Link>
+                <Link to='/'>back to the homepage.</Link>
               </Box>
             ) : (
               <form onSubmit={handleFormSubmit}>
@@ -114,8 +113,8 @@ const Signup = ({ isOpen, onOpen, onClose }) => {
                       size='sm'
                       onClick={handlePasswordToggle}
                       variant='ghost'
-                      _focus={{ boxShadow: 'none' }} 
-                      _hover={{ backgroundColor: 'transparent' }} 
+                      _focus={{ boxShadow: 'none' }}
+                      _hover={{ backgroundColor: 'transparent' }}
                       _active={{ backgroundColor: 'transparent' }}
                     >
                       {showPassword ? (
@@ -127,15 +126,9 @@ const Signup = ({ isOpen, onOpen, onClose }) => {
                   </InputRightElement>
                 </InputGroup>
                 <Flex justify='center' mb='15px'>
-                  <Button
-                    colorScheme='blue'
-                    type='submit'
-                    rounded='full'
-                    width='100%'
-                    variant='solid'
-                  >
+                  <CustomButton type='submit' width='100%'>
                     Sign Up
-                  </Button>
+                  </CustomButton>
                 </Flex>
               </form>
             )}

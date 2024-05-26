@@ -8,7 +8,7 @@ import Layout from '../components/Layout';
 
 import { QUERY_USER, QUERY_ME, QUERY_RIDES } from '../utils/queries';
 import { REMOVE_RIDE } from '../utils/mutations';
-
+import CustomButton from '../components/CustomButton'; // Import CustomButton
 import Auth from '../utils/auth';
 
 const Profile = () => {
@@ -57,8 +57,10 @@ const Profile = () => {
       <Box
         textAlign='center'
         mb={5}
-        border='1px solid #CBD5E0'
+        // border='1px solid #CBD5E0'
         borderRadius='full'
+        boxShadow='xs'
+        bg='white'
       >
         <Heading as='h2' size='lg' bg='' color='black' p={3}>
           Viewing {userParam ? `${user.username}'s` : 'your'} profile.
@@ -66,21 +68,19 @@ const Profile = () => {
       </Box>
 
       <Flex justify='' mt={6} mb={4}>
-        <Button
+        <CustomButton
           borderRadius='full'
           onClick={() => setCurrentFilter('yourRides')}
-          colorScheme={currentFilter === 'yourRides' ? 'blue' : 'gray'}
+          bg={currentFilter === 'yourRides' ? '#150035' : '#847995'}
         >
           Your Rides
-        </Button>
-        <Button
+        </CustomButton>
+        <CustomButton
           borderRadius='full'
           onClick={() => setCurrentFilter('commentedRides')}
-          colorScheme={currentFilter === 'commentedRides' ? 'blue' : 'gray'}
-          ml={2}
-        >
+          bg={currentFilter === 'commentedRides' ? '#150035' : '#847995'} ml={2}>
           Your comments
-        </Button>
+        </CustomButton>
       </Flex>
 
       <Box mb={5}>

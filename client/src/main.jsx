@@ -11,6 +11,7 @@ import SingleRide from './pages/SingleRide.jsx';
 import Support from './pages/Support.jsx';
 import { ChakraProvider } from '@chakra-ui/react';
 import theme from './theme';
+import TestForm from './components/TestForm';
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: '/rides/:id',
         element: <SingleRide />,
+      },
+      {
+        path: '/testform',
+        element: <TestForm />,
       },
     ],
   },

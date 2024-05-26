@@ -55,7 +55,11 @@ const startServer = async () => {
           .json({ error: 'No results found for this query.' });
       }
 
-      const formattedAddresses = response.data.map((item) => item.display_name);
+      const formattedAddresses = response.data.map((item) => ({
+        display_name: item.display_name,
+        lat: item.lat,
+        lon: item.lon,
+      }));
 
       res.json(formattedAddresses);
     } catch (err) {

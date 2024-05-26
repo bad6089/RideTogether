@@ -16,6 +16,7 @@ import { ADD_COMMENT } from '../utils/mutations';
 import Auth from '../utils/auth';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
+import CustomButton from '../components/CustomButton';
 
 const CommentForm = ({ rideId }) => {
   const {
@@ -111,9 +112,9 @@ const CommentForm = ({ rideId }) => {
                   </Text>
                 )}
               </Text>
-              <Button mb={3} colorScheme='blue' rounded='full' type='submit'>
+              <CustomButton mb={3} colorScheme='blue' rounded='full' type='submit'>
                 Let's Plan
-              </Button>
+              </CustomButton>
             </Flex>
           </form>
         </>

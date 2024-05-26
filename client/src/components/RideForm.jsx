@@ -19,13 +19,13 @@ import { format } from 'date-fns';
 import { CalendarIcon, TimeIcon } from '@chakra-ui/icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGlobe, faMapMarker } from '@fortawesome/free-solid-svg-icons';
-
+import CustomButton from '../components/CustomButton';
 import { ADD_RIDE } from '../utils/mutations';
 import { QUERY_RIDES, QUERY_ME } from '../utils/queries';
 import Auth from '../utils/auth';
 import Login from '../pages/Login';
 import Signup from '../pages/Signup';
-import AutocompleteInput from '../components/AutocompleteInput';
+import AutocompleteInput from './AutocompleteInput';
 
 const RideForm = () => {
   const {
@@ -110,7 +110,7 @@ const RideForm = () => {
     <Box
       bg='white'
       p={6}
-      mt={4}
+      mt={-1}
       rounded='md'
       width='100%'
       borderWidth=''
@@ -129,6 +129,7 @@ const RideForm = () => {
       <form onSubmit={handleFormSubmit}>
         <Text
           fontSize='xl'
+          
           mb={4}
           textAlign='center'
           color='#150035'
@@ -177,7 +178,7 @@ const RideForm = () => {
               onChange={(e) => setDate(e.target.value)}
               bg=''
               rounded='full'
-              mb={2}
+              
               width='100%'
               onClick={(e) => e.target.showPicker()}
             />
@@ -219,9 +220,9 @@ const RideForm = () => {
               />
             </HStack>
             
-            <Button colorScheme='blue' type='submit' rounded='full'>
+            <CustomButton type='submit' rounded='full'>
               Submit
-            </Button>
+            </CustomButton>
           </HStack>
         </Flex>
         {error && (
@@ -246,6 +247,7 @@ const RideForm = () => {
           <Login isOpen={isLoginOpen} onClose={onLoginClose} />
           <Signup isOpen={isSignupOpen} onClose={onSignupClose} />
         </Box>
+        
       )}
     </Box>
   );

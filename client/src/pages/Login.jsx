@@ -21,6 +21,7 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import Auth from '../utils/auth';
+import CustomButton from '../components/CustomButton';
 
 const Login = ({ isOpen, onOpen, onClose }) => {
   const [formState, setFormState] = useState({ email: '', password: '' });
@@ -55,9 +56,14 @@ const Login = ({ isOpen, onOpen, onClose }) => {
 
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        px={{ base: 5, md: 0 }}
+        py={{ base: 3, md: 0 }}
+      >
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width={{ base: '90%', md: '' }}>
           <ModalHeader color='#150035'>Welcome Back</ModalHeader>
           <CloseButton
             position='absolute'
@@ -69,10 +75,7 @@ const Login = ({ isOpen, onOpen, onClose }) => {
             {data ? (
               <Box mb='15'>
                 Success! You may now head{' '}
-                <Link 
-                 to='/'>
-                  back to the homepage.
-                </Link>
+                <Link to='/'>back to the homepage.</Link>
               </Box>
             ) : (
               <form onSubmit={handleFormSubmit}>
@@ -114,15 +117,9 @@ const Login = ({ isOpen, onOpen, onClose }) => {
                   </InputRightElement>
                 </InputGroup>
                 <Flex justify='center' mb='15px'>
-                  <Button
-                    colorScheme='blue'
-                    type='submit'
-                    rounded='full'
-                    width='100%'
-                    variant='solid'
-                  >
+                  <CustomButton type='submit' width='100%'>
                     Login
-                  </Button>
+                  </CustomButton>
                 </Flex>
               </form>
             )}

@@ -10,6 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 import { ChatIcon } from '@chakra-ui/icons';
+import CustomButton from '../components/CustomButton';
 
 const CommentAvatar = ({ comments = [], rideId }) => {
   // Create an array of unique authors
@@ -33,12 +34,12 @@ const CommentAvatar = ({ comments = [], rideId }) => {
 
         {rideId && (
           <Link to={`/rides/${rideId}`}>
-            <Button variant='solid' colorScheme='blue' borderRadius='full'>
-              Go to Post <ChatIcon ml={2} style={{ marginLeft: '0.5rem' }} />
+            <CustomButton>
+              View Post <ChatIcon ml={2} style={{ marginLeft: '0.5rem' }} />
               <Text as='span' ml='1' fontSize='sm'>
                 {comments.length}
               </Text>
-            </Button>
+            </CustomButton>
           </Link>
         )}
       </Flex>

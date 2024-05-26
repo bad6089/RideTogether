@@ -19,6 +19,7 @@ import {
   PopoverBody,
   useToast,
   useOutsideClick,
+  useBreakpointValue,
 } from '@chakra-ui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -145,6 +146,9 @@ const SingleRide = () => {
     );
   }
 
+  // Define character limits for mobile and desktop views
+  const characterLimit = useBreakpointValue({ base: 30, md: 85});
+
   const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(
     ride.origin
   )}&destination=${encodeURIComponent(ride.destination)}`;
@@ -153,11 +157,13 @@ const SingleRide = () => {
     <Layout>
       <Box my={3}>
         <Box
-          borderColor='gray.300'
-          borderWidth='1px'
-          borderRadius='3xl'
+          // borderColor='gray.300'
+          // borderWidth='1px'
+          borderRadius='2rem'
           overflow='hidden'
           mb={4}
+          bg='white'
+          boxShadow='xs'
         >
           <Flex
             alignItems='center'
@@ -170,7 +176,7 @@ const SingleRide = () => {
               <Flex alignItems='center'>
                 <Avatar name={ride.rideAuthor} mr={4} />
                 <Box>
-                  <Text fontWeight='bold' fontSize='lg'>
+                  <Text fontWeight='bold' fontSize='lg' color='#150035'>
                     {ride.rideAuthor}
                   </Text>
                   <Text fontSize='sm'>
@@ -242,7 +248,7 @@ const SingleRide = () => {
                   Origin
                 </Text>
                 <Text fontWeight='bold' fontSize='md'>
-                  {truncateText(ride.origin, 30)}
+                  {truncateText(ride.origin, characterLimit)}
                 </Text>
               </Box>
             </Flex>
@@ -277,7 +283,7 @@ const SingleRide = () => {
                   Destination
                 </Text>
                 <Text fontWeight='bold' fontSize='md'>
-                  {truncateText(ride.destination, 30)}
+                  {truncateText(ride.destination, characterLimit)}
                 </Text>
               </Box>
             </Flex>

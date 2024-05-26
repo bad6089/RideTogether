@@ -132,7 +132,7 @@ const CommentList = ({ comments = [], rideId }) => {
             p={2}
             mt={2}
             borderWidth='1px'
-            borderRadius='lg'
+            borderRadius='1rem'
             overflow='visible'
             position='relative'
           >
