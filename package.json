@@ -9,7 +9,7 @@
     "install": "cd server && npm i && cd ../client && npm i",
     "seed": "cd server && npm run seed",
     "build": "cd client && npm run build",
-    "render-build":"npm install && npm run build"
+    "render-build": "npm install && npm run build"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -19,5 +19,13 @@
   "license": "ISC",
   "devDependencies": {
     "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "@turf/turf": "^6.5.0",
+    "leaflet": "^1.9.4",
+    "lodash": "^4.17.21",
+    "mapbox-gl": "^3.4.0",
+    "react-leaflet": "^4.2.1",
+    "react-map-gl": "^7.1.7"
   }
 }

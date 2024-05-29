@@ -41,6 +41,8 @@ const RideForm = () => {
 
   const [origin, setOrigin] = useState('');
   const [destination, setDestination] = useState('');
+  const [originCoords, setOriginCoords] = useState(null);
+  const [destinationCoords, setDestinationCoords] = useState(null);
   const [date, setDate] = useState('');
   const [time, setTime] = useState('');
   const [isDriver, setIsDriver] = useState(false);
@@ -76,6 +78,8 @@ const RideForm = () => {
           time,
           isDriver,
           rideAuthor: Auth.getProfile().data.username,
+          originCoords,
+          destinationCoords,
         },
       });
 
@@ -84,6 +88,8 @@ const RideForm = () => {
       setDate('');
       setTime('');
       setIsDriver(false);
+      setOriginCoords(null);
+      setDestinationCoords(null);
 
       toast({
         title: 'Ride added.',
@@ -129,7 +135,6 @@ const RideForm = () => {
       <form onSubmit={handleFormSubmit}>
         <Text
           fontSize='xl'
-          
           mb={4}
           textAlign='center'
           color='#150035'
@@ -146,6 +151,7 @@ const RideForm = () => {
               placeholder='Origin'
               value={origin}
               onChange={(value) => setOrigin(value)}
+              onCoordinatesChange={(coords) => setOriginCoords(coords)}
               rounded='full'
               width='100%'
             />
@@ -160,6 +166,7 @@ const RideForm = () => {
               placeholder='Destination'
               value={destination}
               onChange={(value) => setDestination(value)}
+              onCoordinatesChange={(coords) => setDestinationCoords(coords)}
               rounded='full'
               width='100%'
             />
@@ -178,7 +185,6 @@ const RideForm = () => {
               onChange={(e) => setDate(e.target.value)}
               bg=''
               rounded='full'
-              
               width='100%'
               onClick={(e) => e.target.showPicker()}
             />
@@ -219,7 +225,7 @@ const RideForm = () => {
                 onChange={() => setIsDriver(!isDriver)}
               />
             </HStack>
-            
+
             <CustomButton type='submit' rounded='full'>
               Submit
             </CustomButton>
@@ -247,7 +253,6 @@ const RideForm = () => {
           <Login isOpen={isLoginOpen} onClose={onLoginClose} />
           <Signup isOpen={isSignupOpen} onClose={onSignupClose} />
         </Box>
-        
       )}
     </Box>
   );

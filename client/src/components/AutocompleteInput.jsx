@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 import {
   Input,
@@ -9,8 +9,16 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react';
+import debounce from 'lodash/debounce';
 
-const AutocompleteInput = ({ placeholder, value, onChange, rounded, width }) => {
+const AutocompleteInput = ({
+  placeholder,
+  value,
+  onChange,
+  onCoordinatesChange,
+  rounded,
+  width,
+}) => {
   const [suggestions, setSuggestions] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -32,17 +40,21 @@ const AutocompleteInput = ({ placeholder, value, onChange, rounded, width }) => 
     }
   };
 
+  const debouncedFetchSuggestions = useCallback(
+    debounce(fetchSuggestions, 500),
+    []
+  );
+
   const handleChange = (e) => {
     const inputValue = e.target.value;
     onChange(inputValue);
-    fetchSuggestions(inputValue);
+    debouncedFetchSuggestions(inputValue);
     setShowSuggestions(true);
   };
 
   const handleSelect = (suggestion) => {
     onChange(suggestion.display_name);
-    console.log('Selected latitude:', suggestion.lat);
-    console.log('Selected longitude:', suggestion.lon);
+    onCoordinatesChange({ lat: suggestion.lat, lon: suggestion.lon });
     setShowSuggestions(false);
   };
 
